@@ -19,7 +19,7 @@ execute:
 
 **WD-1: I can import data from a *variety* of formats (e.g., csv, xlsx, txt, etc.).**
 
--   `csv - Lab 2 Question 1, Lab 3 Question 1`
+-   `csv`
 
 ```{r wd-1-csv}
 
@@ -28,6 +28,7 @@ surveys <- read_csv(here("surveys.csv"))
 
 # Lab 3 (Question 1)
 hiphop <- read_csv(here("hiphop.csv"))
+
   
 ```
 
@@ -35,17 +36,51 @@ hiphop <- read_csv(here("hiphop.csv"))
 
 ```{r wd-1-xlsx}
 
+# Practice Activity 3 (Question 1)
+library(readxl) 
+library(tidyverse)
+
+military <- read_xlsx(here::here("data", 
+                                 "gov_spending_per_capita.xlsx"), 
+                      sheet = "Share of Govt. spending", 
+                      skip = 7, 
+                      n_max = 190)
+
+
 ```
 
 -   `txt`
 
 ```{r wd-1-txt}
 
+# Practice Activity 5.2
 ```
 
 **WD-2: I can select necessary columns from a dataset.**
 
 ```{r wd-2}
+
+# Lab 2 (Question 4)
+weight <- surveys$weight
+ftlength <- surveys$hindfoot_length
+
+ggplot(data = surveys) +
+  geom_point(mapping = aes(x = weight, 
+                           y = ftlength)) +
+  labs(title = "Relationship Between Weight and Hindfoot Length",
+       x = "Weight (g)",
+       y = "Hindfoot Length (mm)")
+
+
+
+# Lab 3 (Question 5)
+hiphop_clean <- hiphop |>
+  select(
+    word, subj, sex, age, ethnic, familiarity, trial, fam1, popularityScore, 
+    city, county, bieber) |>
+  mutate(
+    familarity = as.factor(familiarity))
+
 
 ```
 
@@ -55,11 +90,26 @@ hiphop <- read_csv(here("hiphop.csv"))
 
 ```{r wd-3-numeric}
 
+# Lab 3 (Question 11)
+hiphop_clean |>
+  filter(age < 20, 
+         familiarity == 5) |>
+  count(word, sort = TRUE)
+
+
 ```
 
 -   character -- specifically a string
 
 ```{r wd-3-string}
+
+# Lab 3 (Question 12)
+hiphop_clean |>
+  filter(ethnic != "white", 
+         sex == "Female",
+         familiarity == 5) |>
+  count(word, sort = TRUE)
+
 
 ```
 
@@ -67,11 +117,25 @@ hiphop <- read_csv(here("hiphop.csv"))
 
 ```{r wd-3-factor}
 
+# Lab 3 (Question 11)
+hiphop_clean |>
+  filter(age < 20, 
+         familiarity == 5) |>
+  count(word, sort = TRUE)
+
+
 ```
 
 -   date
 
 ```{r wd-3-date}
+
+# Practicy Activity 5.1 (Question 4)
+Iceland <- with_tz(suspects$Time.Spotted, tzone = "Iceland")
+suspects <- suspects |>
+  filter(pm(Iceland) == TRUE,
+         day(Time.Spotted) %in% c(22, 23, 24))
+
 
 ```
 
