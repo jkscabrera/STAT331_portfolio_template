@@ -22,7 +22,12 @@ execute:
 -   `csv - Lab 2 Question 1, Lab 3 Question 1`
 
 ```{r wd-1-csv}
+
+# Lab 2 (Question 1)
 surveys <- read_csv(here("surveys.csv"))
+
+# Lab 3 (Question 1)
+hiphop <- read_csv(here("hiphop.csv"))
   
 ```
 
