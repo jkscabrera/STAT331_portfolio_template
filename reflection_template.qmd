@@ -245,6 +245,18 @@ I've done this in the following provided assignments:
 
 ```{r r-3-1}
 
+# Challenge 3 (Question 1)
+findbieber <- hiphop_clean |>
+  distinct(subj, .keep_all = TRUE)
+
+findbieber |>
+  filter(sex == "Male",
+         between(age, 17, 23),
+         ethnic == "white",
+         between(city, 10000, 60000)) |>
+  slice_max(bieber)
+
+
 ```
 
 -   Example 2
@@ -329,6 +341,7 @@ I've done this in the following provided assignments:
 
 ```{r dvs-5-1}
 
+# Challenge 3 (Question 1)
 ```
 
 -   Example 2
@@ -407,15 +420,33 @@ I've done this in the following provided assignments:
 
 ```{r pe-3-across}
 
+# Challenge 3 (Question 1)
+hiphop_male <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  group_by(sex) |>
+  summarize(
+    across(
+      intl:unclassifiable,
+      mean,
+      na.rm = TRUE
+    )
+  )
+head(hiphop_male)
+
+
 ```
 
 -   `map()` functions (Provide 2 Examples)
 
 ```{r pe-3-map-1}
 
+# n/a
+
 ```
 
 ```{r pe-3-map-2}
+
+# n/a
 
 ```
 
@@ -474,3 +505,7 @@ I've done this in the following provided assignments:
 ## Peer Support & Collaboration
 
 <!-- Include an image of feedback you gave that you are proud of (either in a peer review or in Discord) -->
+
+![Discord - Week 2 Lab Assignment Channel](images/Screen%20Shot%202023-02-16%20at%2010.04.44%20AM.png)
+
+![Discord - Week 3 Lab Assignment Channel](images/Screen%20Shot%202023-02-16%20at%2010.06.05%20AM.png)
