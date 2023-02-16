@@ -151,12 +151,26 @@ suspects <- suspects |>
 
 ```{r wd-4-string}
 
+# Lab 3 (Question 7)
+hiphop_clean <- hiphop_clean |>
+  mutate(ethnic_bin = 
+           case_when(ethnic == "white" ~ "white",
+                           TRUE ~ "non-white"))
+
+
 ```
 
 -   factor
 
 ```{r wd-4-factor}
 
+# Lab 3 (Question 5)
+hiphop_clean <- hiphop |>
+  select(
+    word, subj, sex, age, ethnic, familiarity, trial, fam1, popularityScore, 
+    city, county, bieber) |>
+  mutate(
+    familarity = as.factor(familiarity))
 ```
 
 -   date
@@ -197,11 +211,23 @@ suspects <- suspects |>
 
 ```{r wd-6-semi}
 
+# Lab 4 (Question 5)
+bigfive <- metro_avo |>
+  semi_join(metro_total, 
+            by = "region")
+
+
 ```
 
 -   `anti_join()`
 
 ```{r wd-6-anti}
+
+# Lab 4 (Question 2)
+metro_avo <- avocado |>
+  anti_join(unwanted, by = "region") |>
+  anti_join(major_region, by = "region")
+
 
 ```
 
@@ -211,11 +237,54 @@ suspects <- suspects |>
 
 ```{r wd-7-long}
 
+# Lab 4 (Question 6)
+cal_avos <- metro_avo |>
+  filter(region %in% c("LosAngeles", 
+                       "SanDiego",
+                       "Sacramento",
+                       "SanFrancisco")) |>
+  select(Date, type, region, AveragePrice) |>
+  pivot_wider(names_from = type, 
+              values_from = AveragePrice) |>
+  group_by(region) |>
+  summarize(avg_conventional = mean(conventional),
+            avg_organic = mean(organic))
+
+
 ```
 
 -   `pivot_wider()`
 
 ```{r wd-7-wide}
+
+# Lab 4 (Question 6)
+cal_avos |>
+  pivot_longer(avg_conventional : avg_organic,
+               names_to = "type",
+               values_to = "price") |>
+  ggplot(mapping = aes(x = region,
+                       y = price,
+                       fill = type)) +
+  geom_bar(stat = "identity",
+           position = position_dodge(),
+           width = 0.6) +
+  labs(x = "City in California",
+       y = "Avocado Price (USD)",
+       title = "Average Price of Convential & Organic Avocados",
+       fill = "Avocado Type") 
+
+# Lab 4 (Question 6)
+cal_avos <- metro_avo |>
+  filter(region %in% c("LosAngeles", 
+                       "SanDiego",
+                       "Sacramento",
+                       "SanFrancisco")) |>
+  select(Date, type, region, AveragePrice) |>
+  pivot_wider(names_from = type, 
+              values_from = AveragePrice) |>
+  group_by(region) |>
+  summarize(avg_conventional = mean(conventional),
+            avg_organic = mean(organic))
 
 ```
 
@@ -262,6 +331,12 @@ findbieber |>
 -   Example 2
 
 ```{r r-3-2}
+
+# Challenge 2 (Question 1)
+weight <- surveys$weight
+ftlength <- surveys$hindfoot_length
+species <- surveys$species
+
 
 ```
 
