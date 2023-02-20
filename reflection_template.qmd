@@ -26,10 +26,11 @@ execute:
 # Lab 2 (Question 1)
 surveys <- read_csv(here("surveys.csv"))
 
+
 # Lab 3 (Question 1)
 hiphop <- read_csv(here("hiphop.csv"))
 
-  
+
 ```
 
 -   `xlsx`
@@ -56,6 +57,7 @@ military <- read_xlsx(here::here("data",
 # Practice Activity 5.2 (Question 1)
 message <- read_csv(here::here("scrambled_message.txt"))
 
+
 ```
 
 **WD-2: I can select necessary columns from a dataset.**
@@ -72,7 +74,6 @@ ggplot(data = surveys) +
   labs(title = "Relationship Between Weight and Hindfoot Length",
        x = "Weight (g)",
        y = "Hindfoot Length (mm)")
-
 
 
 # Lab 3 (Question 5)
@@ -187,6 +188,7 @@ suspects <- suspects |>
          time = as.integer(time)) |>
   filter(time %% 10 == 0)
 
+
 ```
 
 **WD-5: I can use mutating joins to combine multiple dataframes.**
@@ -271,6 +273,7 @@ cal_avos |>
        title = "Average Price of Convential & Organic Avocados",
        fill = "Avocado Type") 
 
+
 ```
 
 -   `pivot_wider()`
@@ -289,6 +292,7 @@ cal_avos <- metro_avo |>
   group_by(region) |>
   summarize(avg_conventional = mean(conventional),
             avg_organic = mean(organic))
+
 
 ```
 
@@ -378,11 +382,40 @@ species <- surveys$species
 
 ```{r dvs-2-1}
 
+# Lab 5 (Question 4)
+surveys |>
+  group_by(year, genus) |>
+  summarize(
+    avg_weight = mean(weight, na.rm = TRUE)) |>
+  ggplot(mapping = aes(x = year,
+                     y = avg_weight,
+                     colour = fct_reorder2(genus, 
+                                          year, 
+                                          avg_weight))) +
+        geom_line() +
+        labs(x = "Year",
+             y = NULL,
+             title = "Average Weight (g)",
+             colour = "Genus")
+
+
 ```
 
 -   Example 2
 
 ```{r dvs-2-2}
+
+# Lab 2 (Question 6)
+ggplot(data = surveys) +
+  geom_jitter(mapping = aes(x = weight, 
+                           y = ftlength),
+             alpha = 0.3,
+             width = 1,
+             height = 1) +
+  labs(title = "Relationship Between Weight and Hindfoot Length",
+       x = "Weight (g)",
+       y = "Hindfoot Length (mm)")
+
 
 ```
 
@@ -392,11 +425,55 @@ species <- surveys$species
 
 ```{r dvs-3-1}
 
+# Lab 3 (Question 10)
+ggplot(data = new_hiphop,
+       mapping = aes(x = age)) +
+  geom_histogram() +
+  facet_wrap(~ ethnic) +
+  labs(title = "Distribution of Ages by Ethnicity",
+       x = "Age (years)",
+       y = "Number of Participants") 
+
+ggplot(data = new_hiphop,
+       mapping = aes(x = age)) +
+  geom_histogram() +
+  facet_wrap(~ sex) +
+  labs(title = "Distribution of Ages by Sex",
+       x = "Age (years)",
+       y = "Number of Participants")
+
+
+ggplot(data = new_hiphop,
+       mapping = aes(x = sex,
+                     fill = ethnic)) +
+  geom_bar() +
+  labs(title = "Distribution of Ethnicity by Sex",
+       x = "Sex",
+       y = "Number of Participants")
+
+
 ```
 
 -   Example 2
 
 ```{r dvs-3-2}
+
+# Challenge 2 (Ugly Plot Challenge)
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, 
+                           y = bill_depth_mm, 
+                           color = flipper_length_mm, 
+                           shape = island, 
+                           size = body_mass_g)) + 
+  labs(title = "Relationship Between Penguins in Palmer Penguins Data Set", 
+       x = "Bill Length (mm)", 
+       y = "Bill Depth (mm)", 
+       color = "Flipper Length", 
+       shape = "Island", 
+       size = "Body Mass (g)") + 
+  xlim(0,200) + 
+  ylim(0,40)
+
 
 ```
 
@@ -406,12 +483,31 @@ species <- surveys$species
 
 ```{r dvs-4-1}
 
+# Challenge 3 (Question 2)
+hiphop_white <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  mutate(ethnic_bin = 
+           case_when(ethnic == "white" ~ "white",
+                           TRUE ~ "non-white"))
+  
+hiphop_white |>
+  group_by(ethnic_bin) |>
+  summarize(
+    across(
+      intl:unclassifiable,
+      mean,
+      na.rm = TRUE
+    )
+  )
+
+
 ```
 
 -   Example 2
 
 ```{r dvs-4-2}
 
+# Lab 3 Question 9
 ```
 
 **DVS-5: I can find summaries of variables across multiple groups.**
@@ -421,6 +517,18 @@ species <- surveys$species
 ```{r dvs-5-1}
 
 # Challenge 3 (Question 1)
+hiphop_male <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  group_by(sex) |>
+  summarize(
+    across(
+      intl:unclassifiable,
+      mean,
+      na.rm = TRUE
+    )
+  )
+head(hiphop_male)
+
 
 ```
 
@@ -429,6 +537,22 @@ species <- surveys$species
 ```{r dvs-5-2}
 
 # Challenge 3 (Question 2)
+hiphop_white <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  mutate(ethnic_bin = 
+           case_when(ethnic == "white" ~ "white",
+                           TRUE ~ "non-white"))
+  
+hiphop_white |>
+  group_by(ethnic_bin) |>
+  summarize(
+    across(
+      intl:unclassifiable,
+      mean,
+      na.rm = TRUE
+    )
+  )
+
 
 ```
 
