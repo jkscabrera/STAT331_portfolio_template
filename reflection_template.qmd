@@ -11,9 +11,9 @@ execute:
   echo: true
 ---
 
-[**My Grade:**]{.underline} I believe my grade equivalent to course work evidenced below to be an A.
+[**My Grade:**]{.ul} I believe my grade equivalent to course work evidenced below to be an B.
 
-[**Learning Objective Evidence:**]{.underline} In the code chunks below, provide code from a Lab or Challenge assignment where you believe you have demonstrated proficiency with the specified learning target. Be sure to specify **where** the code came from (e.g., Lab 4 Question 2).
+[**Learning Objective Evidence:**]{.ul} In the code chunks below, provide code from a Lab or Challenge assignment where you believe you have demonstrated proficiency with the specified learning target. Be sure to specify **where** the code came from (e.g., Lab 4 Question 2).
 
 ## Working with Data
 
@@ -53,7 +53,9 @@ military <- read_xlsx(here::here("data",
 
 ```{r wd-1-txt}
 
-# Practice Activity 5.2
+# Practice Activity 5.2 (Question 1)
+message <- read_csv(here::here("scrambled_message.txt"))
+
 ```
 
 **WD-2: I can select necessary columns from a dataset.**
@@ -171,11 +173,19 @@ hiphop_clean <- hiphop |>
     city, county, bieber) |>
   mutate(
     familarity = as.factor(familiarity))
+
+
 ```
 
 -   date
 
 ```{r wd-4-date}
+
+# Practice Activity 5.1 (Question 6)
+suspects <- suspects |>
+  mutate(time = difftime(Time.Spotted, init, units = "mins"),
+         time = as.integer(time)) |>
+  filter(time %% 10 == 0)
 
 ```
 
@@ -185,11 +195,15 @@ hiphop_clean <- hiphop |>
 
 ```{r wd-5-left}
 
+# n/a
+
 ```
 
 -   `right_join()`
 
 ```{r wd-5-right}
+
+# n/a
 
 ```
 
@@ -197,11 +211,15 @@ hiphop_clean <- hiphop |>
 
 ```{r wd-5-inner}
 
+# n/a
+
 ```
 
 -   `full_join()`
 
 ```{r wd-5-full}
+
+# n/a
 
 ```
 
@@ -238,26 +256,6 @@ metro_avo <- avocado |>
 ```{r wd-7-long}
 
 # Lab 4 (Question 6)
-cal_avos <- metro_avo |>
-  filter(region %in% c("LosAngeles", 
-                       "SanDiego",
-                       "Sacramento",
-                       "SanFrancisco")) |>
-  select(Date, type, region, AveragePrice) |>
-  pivot_wider(names_from = type, 
-              values_from = AveragePrice) |>
-  group_by(region) |>
-  summarize(avg_conventional = mean(conventional),
-            avg_organic = mean(organic))
-
-
-```
-
--   `pivot_wider()`
-
-```{r wd-7-wide}
-
-# Lab 4 (Question 6)
 cal_avos |>
   pivot_longer(avg_conventional : avg_organic,
                names_to = "type",
@@ -272,6 +270,12 @@ cal_avos |>
        y = "Avocado Price (USD)",
        title = "Average Price of Convential & Organic Avocados",
        fill = "Avocado Type") 
+
+```
+
+-   `pivot_wider()`
+
+```{r wd-7-wide}
 
 # Lab 4 (Question 6)
 cal_avos <- metro_avo |>
@@ -417,11 +421,14 @@ species <- surveys$species
 ```{r dvs-5-1}
 
 # Challenge 3 (Question 1)
+
 ```
 
 -   Example 2
 
 ```{r dvs-5-2}
+
+# Challenge 3 (Question 2)
 
 ```
 
@@ -431,11 +438,15 @@ species <- surveys$species
 
 ```{r dvs-6-1}
 
+# n/a
+
 ```
 
 -   Example 2
 
 ```{r dvs-6-2}
+
+# n/a
 
 ```
 
@@ -445,11 +456,15 @@ species <- surveys$species
 
 ```{r dvs-7-1}
 
+# n/a
+
 ```
 
 -   Example 2
 
 ```{r dvs-7-2}
+
+# n/a
 
 ```
 
@@ -460,6 +475,8 @@ species <- surveys$species
 -   using a single function call
 
 ```{r pe-1-one-call}
+
+# n/a 
 
 ```
 
@@ -472,6 +489,8 @@ species <- surveys$species
 -   `map()` functions
 
 ```{r pe-1-map-1}
+
+# n/a
 
 ```
 
@@ -547,11 +566,15 @@ head(hiphop_male)
 
 ```{r dsm-1-1}
 
+# n/a
+
 ```
 
 -   Example 2
 
 ```{r dsm-1-2}
+
+# n/a
 
 ```
 
@@ -561,11 +584,15 @@ head(hiphop_male)
 
 ```{r dsm-2-1}
 
+# n/a
+
 ```
 
 -   Example 2
 
 ```{r dsm-2-2}
+
+# n/a
 
 ```
 
@@ -573,9 +600,13 @@ head(hiphop_male)
 
 <!-- How did you revise your thinking throughout the course? How did you revise your thinking on the code examples you have provided in your portfolio? -->
 
+On several of the lab and challenge assignments, I have received "Growing" in places I need improvement and other suggestions on how to make my code more robust. From the very beginning, in Lab 1, Dr. Theobold stated "it is more resistant to extract a variable based on its name rather than its position in the dataset (2nd column)". Since then, I have modified my code to reflect this and called variables using the "\$" sign. Another example would be in Lab 3. In this assignment, I received several "Growing" for a number of reasons, many of which had to do with the format of the Quarto document, but one was hinting at a better way to "write code to find the maximum of that variable and the subject associated with it." Instead of filtering the variable for a certain number, in my revision, I instead used the slice_max() function. Overall, the comments left by Dr. Theobold, helped me realize that there are several ways to approach code, however, some are arguably better than others.
+
 ## Extending My Thinking
 
 <!-- How did you extended your thinking throughout the course? How did you extend your thinking on the code examples you have provided in your portfolio? -->
+
+When I had extra free time, I tried to expand my knowledge and improve my code through other educational websites. In Lab 2, Question 3 asked what the data types of each variable was in the data set. Though most of the variables were listed as character or numeric, one was listed as a Date variable. I wasn't sure if "Date" was a variable type of its own or something else. After further research, I discovered that Dates were stored as numerical values in R and thus answered the question as such. Another example was in Lab 3, Question 14. The purpose of Question 14 was to filter data to find Justin Bieber. From previous revisions, I recognized that there are more efficient ways to write code so I looked up a better way to write double sided inequalities rather than doing a filter twice for the same variable. One website introduced me to the between() function which works similarly to double sided inequalities. I used this function in my code and overall it was more efficient and I no longer had to write repetetive code for filtering numeric values.
 
 ## Peer Support & Collaboration
 

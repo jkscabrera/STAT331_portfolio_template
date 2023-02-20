@@ -1,0 +1,114 @@
+---
+title: "Lab 1"
+author: "Jasmine Cabrera"
+format: 
+  html:
+    self-contained: true
+    code-fold: true
+#places figure captions above the figure instead of below (default)
+    fig-cap-location: top
+execute: 
+#source code is always output on the page
+  echo: true
+#document will render even if there are errors
+  error: true
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+**3.4: Check the data documentation.**
+
+Before the code chunk, create a section header (using #s) that describes the contents of the section.
+
+# Cars Data Set
+
+```{r}
+summary(cars)
+```
+
+Use the information that pops up in your Help pane in RStudio to fill in the blanks below. Add the questions and your responses after the R code chunk.
+
+**Question:** This data set contains information about \_\_\_. The data was collected in \_\_\_. It has \_\_\_ rows and \_\_\_ variables.
+
+**Answer:** This data set contains information about the speed of cars and the distances taken to stop. The data was collected in the 1920s. It has 50 rows and 2 variables.
+
+You can add options to executable code like this:
+
+**4.0: Creating a Plot.**
+
+Create another section header stating what is included in this section.
+
+# Pressure Data Set Plot
+
+```{r, fig.align = "center" , fig.cap = "Figure 1: Temperature vs. Pressure Scatterplot"}
+#fig.align: used to ensure figure is center aligned
+#fig.cap: used to add figure caption to plot
+#fig-cap-location was used to move the caption above the image rather than below
+#| echo: false
+
+#changes x-axis and y-axis labels to reflect units of measurement
+plot(pressure , ylab = "Pressure (mm)" , xlab = "Temperature (degrees Celsius)" , main = "Scatterplot of the Relationship Between Temperature and Pressure")
+```
+
+**Question:** Similar to what you did before with the cars data set, look up the help file on the pressure data set to determine what units temperature and pressure were measured in.
+
+**Answer:** Temperature was measured in degrees Celsius and pressure was measured in mm.
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+**4.1: Inserting a New Code Chunk.**
+
+Type command + option + i:
+
+```{r}
+
+```
+
+Click on the +C symbol:
+
+```{r}
+
+```
+
+If you are using the Visual editor, then click on the "Insert" button, then select "Code Chunk", and finally select "R":
+
+```{r}
+
+```
+
+**4.2: Creating and Discussing Visualizations.**
+
+# Plotting Cars Data Set
+
+```{r, figures-side, fig.show = 'hold', out.width='50%'}
+#| layout-ncol: 2
+#step 1: extract the distance column of the cars dataset and save it into a new object named dist
+dist <- cars[ , 2]
+
+#step 2: plot the distribution of the stopping distances (contained in dist)
+hist(dist , xlab = "Stopping Distance (ft)" , main = "Histogram of Stopping Distances in Cars Data Set")
+
+#step 3: create a second plot, a scatterplot, visualizing the relationship between stopping distance and speed
+plot(cars , xlab = "Speed (mph)" , ylab = "Stopping Distance (ft)" , main = "Scatterplot of the Relationship Between Speed and Stopping Distance")
+```
+
+Step 5: Create a bulleted list of two aspects of the plots you would like to improve.
+
+-   Title
+
+-   Axis Labels
+
+(I made these changes in the code so that the rendered plots would match the improvements I suggested)
+
+**5: Challenge: Styling Quarto Documents.**
+
+**Question:** Now, make at least one additional modification to your Quarto document. Make sure you explicitly state which tip you tried.
+
+**Answer:** I modified the figure caption locations using the "fig-cap-location" format option. This is shown in the rendered version of this quarto document in Section 4. The caption is by default placed below the figure, but by using the modification, it is now placed above the figure.
