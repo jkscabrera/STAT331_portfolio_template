@@ -148,6 +148,19 @@ suspects <- suspects |>
 
 ```{r wd-4-numeric}
 
+# Lab 4 Question 4
+major_avo |>
+  separate(col = Date,
+           into = c("Year",
+                    "Month",
+                    "Day"),
+           sep = "-") |>
+  group_by(Month) |>
+  summarize(month_volume = sum(total_volume),
+            month_avg_vol = mean(total_volume)) |>
+  slice_max(month_avg_vol)
+
+
 ```
 
 -   character -- specifically a string
@@ -308,11 +321,37 @@ I've done this in the following provided assignments:
 
 ```{r r-2-1}
 
+# Lab 2 Question 11
+ggplot(data = surveys, 
+       mapping = aes(x = weight,
+                    y = species)) +
+  geom_jitter(color = "tomato") +
+  geom_boxplot() +
+  labs(title = "Distribution of Weight Within Each Species",
+       x = "Weight (g)",
+       y = "Species") 
+
+
 ```
 
 -   Example 2
 
 ```{r r-2-2}
+
+# Chalenge 3 Question 1
+hiphop_male <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  filter(sex == "Male") 
+
+hiphop_male |>
+  summarize(
+    across(
+      intl:unclassifiable,
+      mean,
+      na.rm = TRUE
+    )
+  )
+
 
 ```
 
@@ -356,11 +395,35 @@ species <- surveys$species
 
 ```{r dvs-1-num}
 
+# Lab 2 Question 7
+species <- surveys$species
+
+ggplot(data = surveys) +
+  geom_jitter(mapping = aes(x = weight, 
+                           y = ftlength),
+             alpha = 0.3,
+             width = 1,
+             height = 1) +
+  facet_wrap(~ species) +
+  labs(title = "Relationship Between Weight and Hindfoot Length",
+       x = "Weight (g)",
+       y = "Hindfoot Length (mm)")
+
+
 ```
 
 -   numeric variables and categorical variables
 
 ```{r dvs-2-num-cat}
+
+# Lab 2 Question 8
+ggplot(data = surveys) +
+  geom_boxplot(mapping = aes(x = weight,
+                             y = species)) +
+  labs(title = "Distribution of Weight Within Each Species",
+       x = "Weight (g)",
+       y = "Species")
+
 
 ```
 
@@ -368,11 +431,34 @@ species <- surveys$species
 
 ```{r dvs-2-cat}
 
+# Lab 3 Question 10
+ggplot(data = new_hiphop,
+       mapping = aes(x = sex,
+                     fill = ethnic)) +
+  geom_bar() +
+  labs(title = "Distribution of Ethnicity by Sex",
+       x = "Sex",
+       y = "Number of Participants")
+
+
 ```
 
 -   dates
 
 ```{r dvs-2-date}
+
+# Lab 5 Part 2 Question 1
+library(lubridate)
+
+surveys |>
+  ggplot(mapping = aes(x = date,
+                     y = weight,
+                     colour = genus)) +
+        geom_line() +
+        labs(x = "Date",
+             y = "Weight (g)",
+             Colour = "Genus")
+
 
 ```
 
@@ -508,6 +594,10 @@ hiphop_white |>
 ```{r dvs-4-2}
 
 # Lab 3 Question 9
+new_hiphop |>
+  summarize(age)
+
+
 ```
 
 **DVS-5: I can find summaries of variables across multiple groups.**
@@ -608,6 +698,20 @@ hiphop_white |>
 
 ```{r pe-1-across}
 
+# Challenge 3 Question 1
+hiphop_male <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  group_by(sex) |>
+  summarize(
+    across(
+      intl:unclassifiable,
+      mean,
+      na.rm = TRUE
+    )
+  )
+head(hiphop_male)
+
+
 ```
 
 -   `map()` functions
@@ -624,11 +728,15 @@ hiphop_white |>
 
 ```{r pe2-1}
 
+# n/a
+
 ```
 
 -   Example 2
 
 ```{r pe2-2}
+
+# n/a
 
 ```
 
@@ -674,11 +782,41 @@ head(hiphop_male)
 
 ```{r pe-4-1}
 
+# Challenge 3 Question 2
+hiphop_white <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  mutate(ethnic_bin = 
+           case_when(ethnic == "white" ~ "white",
+                           TRUE ~ "non-white"))
+  
+hiphop_white |>
+  group_by(ethnic_bin) |>
+  summarize(
+    across(
+      intl:unclassifiable,
+      mean,
+      na.rm = TRUE
+    )
+  )
+
+
 ```
 
 -   Example 2
 
 ```{r pe-4-2}
+
+# Lab 3 Question 14
+findbieber <- hiphop_clean |>
+  distinct(subj, .keep_all = TRUE)
+
+findbieber |>
+  filter(sex == "Male",
+         between(age, 17, 23),
+         ethnic == "white",
+         between(city, 10000, 60000)) |>
+  slice_max(bieber)
+
 
 ```
 
