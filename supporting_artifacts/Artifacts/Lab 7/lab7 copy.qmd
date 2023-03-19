@@ -197,7 +197,7 @@ rescale_column <- function(dataframe, variables){
   
   dataframe <- dataframe |>
     mutate(across(.cols = {{variables}},
-                  ~ rescale_01(.x))) 
+                  .fns = ~ rescale_01(.x))) 
   
   return(dataframe)
 }

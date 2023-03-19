@@ -77,7 +77,9 @@ This should be the data set you use for the remainder of the assignment.
 
     allison_f <- names |>
       rename(Sex = Gender) |>
-      filter(Name == "Allison") |>
+      filter(Name == "Allison") 
+    
+    allison_f|>
       group_by(Year) |>
       summarize(Total = sum(Count)) |>
       ggplot(mapping = aes(x = Year,
@@ -94,72 +96,6 @@ This should be the data set you use for the remainder of the assignment.
     allison_f
     ```
 
-```{r summary and visualization}
-allison <- names |>
-  filter(Name == "Allison") |>
-  pivot_wider(names_from = "State",
-              values_from = "Count",
-              values_fill = 0) |>
-  pivot_longer("AK":"WY",
-               names_to = "State",
-               values_to = "Count") |>
-  select(State, Gender, Year, Count) |>
-  rename("Sex" = "Gender") |>
-  print()
-
-
-
-
-allison |>
-  knitr::kable(format = "html",
-               col.names = c("State",
-                             "Sex",
-                             "Year",
-                             "Count"),
-               caption = "Summary of Frequency and Sex of Allisons in Each State") |>
-  kableExtra::kable_classic(html_font = "Arial") |>
-  kableExtra::kable_styling(bootstrap_options = "striped")
-
-
-
-
-
-allison_f <- allison |>
-  filter(Sex == "F") |>
-  print()
-
-allison_f |>
-  select(State, Year, Count) |>
-  knitr::kable(format = "html",
-               col.names = c("State",
-                             "Year",
-                             "Count"),
-               caption = "Summary of Frequency of Female Birthed Allisons in Each State") |>
-  kableExtra::kable_classic(html_font = "Arial") |>
-  kableExtra::kable_styling(bootstrap_options = "striped")
-
-
-
-
-allison_f |>
-  group_by(Year) |>
-  summarize(Total = sum(Count)) |>
-  ggplot(mapping = aes(x = Year,
-                       y = Total)) +
-  geom_line() +
-  labs(y = NULL,
-       title = "Total Number of Allisons Born Between 1997-2014") +
-  scale_x_continuous(breaks = seq(1997, 2014, by = 1), 
-                     guide =  guide_axis(n.dodge = 2)) +
-  scale_y_continuous(breaks = seq(5000, 9000, by = 1000), 
-                     limits = c(5000, 8000)) + 
-  theme(plot.title = element_text(face = "bold",
-                                  hjust = 0.5))
-
-
-
-```
-
 **Source:**
 
 https://stackoverflow.com/questions/55948425/why-is-scale-y-continuous-not-working-here-no-error-message-given
@@ -172,7 +108,7 @@ https://www.datanovia.com/en/blog/ggplot-title-subtitle-and-caption/#:\~:text=Ch
 
 5.  Write out the estimated regression equation.
 
-    **Total Number of Allisons = 209689.8 -101.5(Year)**
+    **Estimated Total Number of Allisons = 209689.8 -101.5(Year)**
 
     \*\*\***Note:** Year must be substituted with the actual Year (i.e. 1997, 2014, etc.)
 
@@ -192,9 +128,6 @@ allison_lm <- allison_f |>
   summarize(Total = sum(Count)) |>
   lm(Total ~ Year, data = _) |>
   print()
-
-allison_lm |>
-  gt()
 
 allison_lm |>
   broom::augment() |>
@@ -240,23 +173,7 @@ allans <- tibble(Name = c("Allan",
 allan_names <- names |>
   filter(Gender == "M") |>
   semi_join(allans, by = "Name") |>
-  rename("Sex" = "Gender") |>
-  print()
-
-
-
-allan_names |>
-  knitr::kable(format = "html",
-               col.names = c("Name",
-                             "Year",
-                             "Sex",
-                             "State",
-                             "Count"),
-               caption = "Frequency and Sex of 'Allen', 'Allan', and 'Alan' Individually in Each State") |>
-  kableExtra::kable_classic(html_font = "Arial") |>
-  kableExtra::kable_styling(bootstrap_options = "striped")
-
-
+  rename("Sex" = "Gender") 
 
 allan_names |>
   group_by(Name, Year) |>
