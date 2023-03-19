@@ -1,0 +1,225 @@
+---
+title: "Lab 5: Factors in Visualizations"
+format: 
+  html:
+    self-contained: true
+    code-tools: true
+    code-fold: true
+execute: 
+  echo: true
+  error: false
+  messages: false
+  warning: false
+editor: visual
+---
+
+## 1. Revisiting Lab 2
+
+Let's start with the side-by-side box plots you created in Week 2, to visualize the distribution of weight within each species (not species ID).
+
+As you should expect with a character variable, the box plots go in alphabetical order. This looks rather jumbled, so let's put our factor skills to work!
+
+**Q1:** Reorder the species so the box plots for weights go in descending order (largest to smallest).
+
+**Note:** You are required to use functions from forcats to complete this task.
+
+[**Original Code:**]{.underline}
+
+```{r original code}
+library(tidyverse)
+library(here)
+surveys <- read_csv(here("data", "surveys.csv"))
+
+ggplot(data = surveys, 
+       mapping = aes(x = weight,
+                    y = species)) +
+  geom_jitter(color = "tomato",
+              alpha = 0.3) +
+  geom_boxplot(outlier.shape = NA) +
+  labs(x = "Weight (g)",
+       y = "Species")  
+```
+
+[**New Code:**]{.underline}
+
+```{r new code w forcats}
+surveys |>
+  mutate(
+    species = fct_reorder(species, weight)) |>
+  ggplot(mapping = aes(x = weight,
+                       y = species)) +
+  geom_jitter(color = "tomato",
+              alpha = 0.3) +
+  geom_boxplot(outlier.shape = NA) +
+  labs(x = "Weight (g)",
+       y = "Species")
+```
+
+**Q2:** Now that you've reordered, look at your y-axis label. That's long! Let's take Will Chase's advice and move the y-axis label to the top of the plot.
+
+**Note:** Your plot should have no y-axis label, only a plot title and x-axis label!
+
+```{r changing labels}
+surveys |>
+  mutate(
+    species = fct_reorder(species, weight)) |>
+  ggplot(mapping = aes(x = weight,
+                       y = species)) +
+  geom_jitter(color = "tomato",
+              alpha = 0.3) +
+  geom_boxplot(outlier.shape = NA) +
+  labs(x = "Weight (g)",
+       y = NULL,
+       title = "Species")
+```
+
+## 2. Time-Series Plot
+
+This week, we focused on learning skills related to working with dates, but we have yet to make a very common type of plot - the time-series plot. We'll use this plot to motivate a second type of factor reordering!
+
+**Q1:** Create a visualization how weight vary for each genus over the duration of the study.
+
+Alright, there are a lot of measurements over time! Let's use our dplyr skills to summarize each year and plot the summaries.
+
+```{r time-series plot}
+library(lubridate)
+
+surveys |>
+  ggplot(mapping = aes(x = date,
+                     y = weight,
+                     colour = genus)) +
+        geom_line() +
+        labs(x = "Date",
+             y = "Weight (g)",
+             Colour = "Genus")
+```
+
+**Q2:** Calculate and plot the [mean]{.underline} weight for each genus for each year.
+
+This should look less busy! However, you should notice that the legend still goes in alphabetical order.
+
+```{r time-series plot w avg weight}
+surveys |>
+  group_by(year, genus) |>
+  summarize(
+    avg_weight = mean(weight, na.rm = TRUE)) |>
+  ggplot(mapping = aes(x = year,
+                     y = avg_weight,
+                     colour = genus)) +
+        geom_line() +
+        labs(x = "Year",
+             y = "Average Weight (g)",
+             colour = "Genus")
+```
+
+**Q3:** Reorder the lines so the mean weights go in descending order (largest to smallest).
+
+**Note:** You are required to use function from forcats to complete this task.
+
+```{r new t-s plot w avg weight}
+surveys |>
+  group_by(year, genus) |>
+  summarize(
+    avg_weight = mean(weight, na.rm = TRUE)) |>
+  ggplot(mapping = aes(x = year,
+                     y = avg_weight,
+                     colour = fct_reorder2(genus, 
+                                          year, 
+                                          avg_weight))) +
+        geom_line() +
+        labs(x = "Year",
+             y = "Average Weight (g)",
+             colour = "Genus")
+```
+
+**Q4:** Now that you've reordered the lines, look at your legend's label. That's terrible! Let's give the legend a new title and move the information from the y-axis to the plot title.
+
+**Note:** Your plot should have no y-axis label! You are permitted to have a plot title, x-axis label, and legend title.
+
+```{r t-s plot w new labels}
+surveys |>
+  group_by(year, genus) |>
+  summarize(
+    avg_weight = mean(weight, na.rm = TRUE)) |>
+  ggplot(mapping = aes(x = year,
+                     y = avg_weight,
+                     colour = fct_reorder2(genus, 
+                                          year, 
+                                          avg_weight))) +
+        geom_line() +
+        labs(x = "Year",
+             y = NULL,
+             title = "Average Weight (g)",
+             colour = "Genus")
+```
+
+## 3. Captures Over the Week
+
+For our final exploration, we will consider the number of rodents captured throughout the week -- transitioning to visualizations of categorical variables.
+
+**Q1:** Create a visualization of the number of rodents captured each day of the week.
+
+As you might have expected, the ordering of the days of the week is not what we would like.
+
+```{r rodents captured visualization}
+surveys |>
+  drop_na(day_of_week) |>
+  group_by(day_of_week) |>
+  ggplot(mapping = aes(x = day_of_week)) +
+        geom_bar(stat = "count") +
+        labs(x = "Day of Week",
+             y = NULL,
+             title = "Rodents Captured")
+```
+
+**Q2:** Change the order of the day of.the week to go Monday through Sunday.
+
+**Note:** You can choose to keep the days named as they are (e.g. Mon, Sun), or you can choose to rename the days to their full name (e.g. Monday, Sunday).
+
+**Note:** Your plot should not make people tilt their heads to read it! Be mindful in choosing which variable goes on which axis and if / how you use axis labels.
+
+```{r visualizationr reorder}
+surveys |>
+  group_by(day_of_week) |>
+  mutate(day_of_week = factor(day_of_week, 
+                                  levels = c("Mon", 
+                                             "Tue", 
+                                             "Wed",
+                                             "Thu",
+                                             "Fri",
+                                             "Sat",
+                                             "Sun",
+                                             "NA"))) |>
+  drop_na(day_of_week) |>
+  ggplot(mapping = aes(x = day_of_week)) +
+        geom_bar(stat = "count") +
+        labs(x = "Day of Week",
+             y = NULL,
+             title = "Rodents Captured")
+```
+
+It should be very clear that there are more rodents captured on the weekend than during the week. But, let's explore if this is still the case if we use a "Weekday" / "Weekend" classification system instead.
+
+**Q3.** Collapse Monday through Friday into a "Weekday" level, and collapse Saturday and Sunday into a "Weekend" level. Plot the number of rodents captured between the two groups.
+
+**Note:** You are required to use functions from forcats to complete this task. Your plots should not make people tilt their heads to read it! Be mindful in choosing which variable goes on which axis and if/how you use axis labels.
+
+```{r visualization collapsed}
+surveys |>
+  group_by(day_of_week) |>
+  mutate(day_of_week = fct_collapse(day_of_week, 
+                                  "Weekday" = c("Mon", 
+                                                "Tue", 
+                                                "Wed",
+                                                "Thu",
+                                                "Fri"),
+                                  "Weekend" = c("Sat",
+                                                "Sun"),
+                                  "NA" = "NA")) |>
+  drop_na(day_of_week) |>
+  ggplot(mapping = aes(x = day_of_week)) +
+        geom_bar(stat = "count") +
+        labs(x = "Day of Week",
+             y = NULL,
+             title = "Rodents Captured")
+```

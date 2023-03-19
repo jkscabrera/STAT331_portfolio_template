@@ -1,0 +1,87 @@
+---
+title: "Challenge 3 Revision: Group Comparisons and Data Ethics"
+author: "Jasmine Cabrera"
+format:
+  html:
+    self-contained: true
+    code-tools: true 
+    code-fold: true
+execute:
+  echo: true
+  error: false
+  message: false
+---
+
+## 5.1 Published Comparisons
+
+Let us instead compare the number of artists participants reported liking for each genre. Specifically, you will determine which music genre most differentiates each of the demographic groups provided.
+
+Which genre had much higher average (mean or median) reported artists in one group than the other.
+
+-   Male versus Female
+
+-   White versus Non-White
+
+```{r data}
+# code chunk for loading packages and importing the data
+
+# Loads in packages
+library(tidyverse)
+library(here)
+
+# Imports data
+hiphop <- read_csv(here("hiphop.csv"))
+
+```
+
+```{r males vs females}
+
+hiphop_male <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  group_by(sex) |>
+  summarize(across(.cols = intl:unclassifiable,
+                   .fns = ~ mean(.x, na.rm = TRUE))) |>
+  pivot_longer("intl":"unclassifiable",
+               names_to = "Genres",
+               values_to = "Mean") |>
+  pivot_wider(names_from = "sex",
+              values_from = "Mean") |>
+  mutate(Difference = Female - Male) |>
+  print()
+
+```
+
+```{r white vs nonwhite}
+
+hiphop_white <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  mutate(ethnic_bin = 
+         case_when(ethnic == "white" ~ "White",
+                   TRUE ~ "NotWhite")) |>
+  group_by(ethnic_bin) |>
+  summarize(across(.cols = intl:unclassifiable,
+                   .fns = ~ mean(.x, na.rm = TRUE))) |>
+  pivot_longer("intl":"unclassifiable",
+               names_to = "Genres",
+               values_to = "Mean") |>
+  pivot_wider(names_from = "ethnic_bin",
+              values_from = "Mean") |>
+  mutate(Difference = NotWhite - White) |>
+  print()
+
+```
+
+Q1 Answer:
+
+Overall, men had a higher average in the vocal, classical, and rock categories, whereas women had a higher average in the international, folk, country, pop, alternative, hiphop, and unclassifiable categories. This is shown in the "Difference" column. When Men have a higher average in a certain genre, the difference will be negative compared to when Women have a higher average, the difference is positive.
+
+
+Overall, people of white descent had a higher average in the vocal, folk, rock, country, and alternative categories, whereas people of non-white descent had a higher average in the international, classical, pop, hiphop, and unclassifiable categories. This is also shown in the "Difference" column. When people of white descent have a higher average in a certain genre, the difference column will display a negative number whereas when people of a non-white descent have a higher average, the column will display a positive number.
+
+## 5.2 Study Design Critique -- Data Ethics
+
+Based in the design of this study and its context (African American English), what are at least two concerns you have? Keep in mind this critique aligns with conversations regarding data ethics. Thus, your concerns need to address the racial aspects of the design of this study.
+
+One of the main concerns that I have is the reason why the researcher wanted to start this study. The researcher's description of African American English involve quotes such as "due to continued segregation patterns for African-Americans, many MAE speakers might rarely interact with speakers of AAE" and "due to hiphop's genre-specific themes of violence, however, the AAE vocabulary used in hiphop should not be considered representative of AAE vocabulary in general" which to me gives off a negative bias. There are few, if any positive words said about African American English (AAE) which portrays a negative light.
+
+The study looks into whether "the preference for hip-hop music, can predict AAE vocabulary knowledge above and beyond ethnicity, social network phenomena, and general pop-culture knowledge". However, in the final report the researcher removes two data subjects from the overall data both of which are African American or of biracial descent. For me, it is a bit questionable why out of 168 participants there were only 2 participants of that descent with the majority being of white.

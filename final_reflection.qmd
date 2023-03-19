@@ -1,0 +1,877 @@
+---
+title: "STAT 331 Portfolio"
+author: "Jasmine Cabrera"
+format: 
+  html: 
+    self-contained: true
+layout: margin-left
+editor: visual
+execute: 
+  eval: false
+  echo: true
+---
+
+[**My Grade:**]{.underline} I believe my grade equivalent to course work evidenced below to be an B.
+
+[**Learning Objective Evidence:**]{.underline} In the code chunks below, provide code from a Lab or Challenge assignment where you believe you have demonstrated proficiency with the specified learning target. Be sure to specify **where** the code came from (e.g., Lab 4 Question 2).
+
+## Working with Data
+
+**WD-1: I can import data from a *variety* of formats (e.g., csv, xlsx, txt, etc.).**
+
+-   `csv`
+
+```{r wd-1-csv}
+
+# Lab 2 (Question 1)
+surveys <- read_csv(here("surveys.csv"))
+
+
+```
+
+-   `xlsx`
+
+```{r wd-1-xlsx}
+
+# Practice Activity 3 (Question 1)
+library(readxl) 
+library(tidyverse)
+
+military <- read_xlsx(here::here("data", 
+                                 "gov_spending_per_capita.xlsx"), 
+                      sheet = "Share of Govt. spending", 
+                      skip = 7, 
+                      n_max = 190)
+
+
+```
+
+-   `txt`
+
+```{r wd-1-txt}
+
+# Practice Activity 5.2 (Question 1)
+message <- read_csv(here::here("scrambled_message.txt"))
+
+
+```
+
+**WD-2: I can select necessary columns from a dataset.**
+
+```{r wd-2}
+
+# Lab 3 (Question 5)
+hiphop_clean <- hiphop |>
+  select(
+    word, subj, sex, age, ethnic, familiarity, trial, fam1, popularityScore, 
+    city, county, bieber) |>
+  mutate(
+    familarity = as.factor(familiarity))
+
+
+```
+
+**WD-3: I can filter rows from a dataframe for a *variety* of data types (e.g., numeric, integer, character, factor, date).**
+
+-   numeric
+
+```{r wd-3-numeric}
+
+# Lab 3 (Question 11)
+hiphop_clean |>
+  filter(age < 20, 
+         familiarity == 5) |>
+  count(word, sort = TRUE)
+
+
+```
+
+-   character -- specifically a string
+
+```{r wd-3-string}
+
+## find filter w stringr func
+
+
+```
+
+-   factor
+
+```{r wd-3-factor}
+
+# Lab 3 (Question 12)
+hiphop_clean |>
+  filter(ethnic != "white", 
+         sex == "Female",
+         familiarity == 5) |>
+  count(word, sort = TRUE)
+
+
+```
+
+-   date
+
+```{r wd-3-date}
+
+# Practicy Activity 5.1 (Question 4)
+Iceland <- with_tz(suspects$Time.Spotted, tzone = "Iceland")
+suspects <- suspects |>
+  filter(pm(Iceland) == TRUE,
+         day(Time.Spotted) %in% c(22, 23, 24))
+
+
+```
+
+**WD-4: I can modify existing variables and create new variables in a dataframe for a *variety* of data types (e.g., numeric, integer, character, factor, date).**
+
+-   numeric
+
+```{r wd-4-numeric}
+
+# find mutate num 
+
+```
+
+-   character -- specifically a string
+
+```{r wd-4-string}
+
+# find mutate w stringr func
+
+
+```
+
+-   factor
+
+```{r wd-4-factor}
+
+# Lab 3 (Question 7)
+hiphop_clean <- hiphop_clean |>
+  mutate(ethnic_bin = 
+           case_when(ethnic == "white" ~ "white",
+                           TRUE ~ "non-white"))
+
+
+```
+
+-   date
+
+```{r wd-4-date}
+
+# Practice Activity 5.1 (Question 6)
+suspects <- suspects |>
+  mutate(time = difftime(Time.Spotted, init, units = "mins"),
+         time = as.integer(time)) |>
+  filter(time %% 10 == 0)
+
+
+```
+
+**WD-5: I can use mutating joins to combine multiple dataframes.**
+
+-   `left_join()`
+
+```{r wd-5-left}
+
+# preview activity 4
+
+```
+
+-   `right_join()`
+
+```{r wd-5-right}
+
+# preview activity 4
+
+```
+
+-   `inner_join()`
+
+```{r wd-5-inner}
+
+# preview activity 4
+
+```
+
+-   `full_join()`
+
+```{r wd-5-full}
+
+# Lab 7 (Part 3.6)
+rescale_col_test <- blackfoot |>
+  rescale_column(length:weight) |>
+  mutate(id = seq_along(1:nrow(blackfoot))) |>
+  select(id, length:weight)
+
+
+rescale_confirm <- blackfoot |>
+  mutate(across(.cols = length:weight,
+                ~ rescale(.x, 
+                          to = c(0,1),
+                          from = range(.x, 
+                                       na.rm = TRUE, 
+                                       finite = TRUE)))) |>
+  mutate(id = seq_along(1:nrow(blackfoot))) |>
+  select(id, length:weight) |>
+  rename("rescale(length)" = "length",
+         "rescale(weight)" = "weight")
+
+
+rescale_compare <- full_join(rescale_col_test, rescale_confirm, by = "id") 
+rescale_compare <- rescale_compare |>
+  select("weight", "rescale(weight)", "length", "rescale(length)")
+rescale_compare
+
+
+```
+
+**WD-6: I can use filtering joins to filter rows from a dataframe.**
+
+-   `semi_join()`
+
+```{r wd-6-semi}
+
+# %in% in lab 9 ?
+
+
+```
+
+-   `anti_join()`
+
+```{r wd-6-anti}
+
+# practice activity 4
+
+```
+
+**WD-7: I can pivot dataframes from long to wide and visa versa**
+
+-   `pivot_longer()`
+
+```{r wd-7-long}
+
+# Lab 7 (Part 2.1)
+NAsum <- blackfoot |>
+  mutate(across(.cols = trip : species, 
+                ~ sum(is.na(.x)))) |>
+  pivot_longer("trip" : "species",
+               names_to = "Variable Name",
+               values_to = "Missing Values")
+head(NAsum)
+
+
+
+```
+
+-   `pivot_wider()`
+
+```{r wd-7-wide}
+
+# Challenge 3 (Question 1)
+hiphop_male <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  group_by(sex) |>
+  summarize(across(.cols = intl:unclassifiable,
+                   .fns = ~ mean(.x, na.rm = TRUE))) |>
+  pivot_longer("intl":"unclassifiable",
+               names_to = "Genres",
+               values_to = "Mean") |>
+  pivot_wider(names_from = "sex",
+              values_from = "Mean") |>
+  mutate(Difference = Female - Male) |>
+  print()
+
+
+
+```
+
+## Reproducibility
+
+**R-1: I can create professional looking, reproducible analyses using RStudio projects, Quarto documents, and the here package.**
+
+I've done this in the following provided assignments:
+
+**R-2: I can write well documented and tidy code.**
+
+-   Example 1
+
+```{r r-2-1}
+
+# Lab 2 Question 11
+ggplot(data = surveys, 
+       mapping = aes(x = weight,
+                    y = species)) +
+  geom_jitter(color = "tomato") +
+  geom_boxplot() +
+  labs(title = "Distribution of Weight Within Each Species",
+       x = "Weight (g)",
+       y = "Species") 
+
+
+```
+
+-   Example 2
+
+```{r r-2-2}
+
+# Chalenge 3 Question 2
+hiphop_white <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  mutate(ethnic_bin = 
+         case_when(ethnic == "white" ~ "White",
+                   TRUE ~ "NotWhite")) |>
+  group_by(ethnic_bin) |>
+  summarize(across(.cols = intl:unclassifiable,
+                   .fns = ~ mean(.x, na.rm = TRUE))) |>
+  pivot_longer("intl":"unclassifiable",
+               names_to = "Genres",
+               values_to = "Mean") |>
+  pivot_wider(names_from = "ethnic_bin",
+              values_from = "Mean") |>
+  mutate(Difference = NotWhite - White) |>
+  print()
+
+
+
+```
+
+**R-3: I can write robust programs that are resistant to changes in inputs.**
+
+-   Example 1
+
+```{r r-3-1}
+
+# Challenge 3 (Question 1)
+findbieber <- hiphop_clean |>
+  distinct(subj, .keep_all = TRUE)
+
+findbieber |>
+  filter(sex == "Male",
+         between(age, 17, 23),
+         ethnic == "white",
+         between(city, 10000, 60000)) |>
+  slice_max(bieber)
+
+
+```
+
+-   Example 2
+
+```{r r-3-2}
+
+# Lab 7 (Part 3.5)
+rescale_column <- function(dataframe, variables){
+  stopifnot(is.data.frame(dataframe))
+  
+  dataframe <- dataframe |>
+    mutate(across(.cols = {{variables}},
+                  ~ rescale_01(.x))) 
+  
+  return(dataframe)
+}
+
+
+```
+
+## Data Visualization & Summarization
+
+**DVS-1: I can create visualizations for a *variety* of variable types (e.g., numeric, character, factor, date)**
+
+-   numeric variables
+
+```{r dvs-1-num}
+
+# Lab 2 Question 7
+ggplot(data = surveys) +
+  geom_jitter(mapping = aes(x = weight, 
+                           y = ftlength),
+             alpha = 0.3,
+             width = 1,
+             height = 1) +
+  facet_wrap(~ species) +
+  labs(title = "Relationship Between Weight and Hindfoot Length",
+       x = "Weight (g)",
+       y = "Hindfoot Length (mm)")
+
+
+```
+
+-   numeric variables and categorical variables
+
+```{r dvs-2-num-cat}
+
+# Lab 2 Question 8
+ggplot(data = surveys) +
+  geom_boxplot(mapping = aes(x = weight,
+                             y = species)) +
+  labs(title = "Distribution of Weight Within Each Species",
+       x = "Weight (g)",
+       y = "Species")
+
+
+```
+
+-   categorical variables
+
+```{r dvs-2-cat}
+
+# Lab 3 Question 10
+ggplot(data = new_hiphop,
+       mapping = aes(x = sex,
+                     fill = ethnic)) +
+  geom_bar() +
+  labs(title = "Distribution of Ethnicity by Sex",
+       x = "Sex",
+       y = "Number of Participants")
+
+
+```
+
+-   dates
+
+```{r dvs-2-date}
+
+# Lab 5 Question 4
+surveys |>
+  group_by(year, genus) |>
+  summarize(
+    avg_weight = mean(weight, na.rm = TRUE)) |>
+  ggplot(mapping = aes(x = year,
+                     y = avg_weight,
+                     colour = fct_reorder2(genus, 
+                                          year, 
+                                          avg_weight))) +
+        geom_line() +
+        labs(x = "Year",
+             y = NULL,
+             title = "Average Weight (g)",
+             colour = "Genus")
+
+
+```
+
+**DVS-2: I use plot modifications to make my visualization clear to the reader.**
+
+-   Example 1
+
+```{r dvs-2-1}
+
+# Lab 5 (Question 4)
+surveys |>
+  group_by(year, genus) |>
+  summarize(
+    avg_weight = mean(weight, na.rm = TRUE)) |>
+  ggplot(mapping = aes(x = year,
+                     y = avg_weight,
+                     colour = fct_reorder2(genus, 
+                                          year, 
+                                          avg_weight))) +
+        geom_line() +
+        labs(x = "Year",
+             y = NULL,
+             title = "Average Weight (g)",
+             colour = "Genus")
+
+
+```
+
+-   Example 2
+
+```{r dvs-2-2}
+
+# Lab 2 (Question 6)
+ggplot(data = surveys) +
+  geom_jitter(mapping = aes(x = weight, 
+                           y = ftlength),
+             alpha = 0.3,
+             width = 1,
+             height = 1) +
+  labs(title = "Relationship Between Weight and Hindfoot Length",
+       x = "Weight (g)",
+       y = "Hindfoot Length (mm)")
+
+
+```
+
+**DVS-3: I show creativity in my visualizations**
+
+-   Example 1
+
+```{r dvs-3-1}
+
+# Lab 7 (Part 2.2)
+visualizing <- blackfoot |>
+  filter(if_any(.cols = trip : species,
+                ~ is.na(.x))) |>
+  mutate(trip = as.factor(trip),
+         year = as.factor(year)) |>
+  rename("Trip" = trip) 
+
+ggplot(data = visualizing, 
+       mapping = aes(x = year,
+                     fill = section)) +
+  geom_bar() +
+  facet_wrap(~ Trip,
+             labeller = labeller(Trip = label_both)) +
+        labs(x = "Year",
+             y = NULL,
+             title = "Observations with Missing Values",
+             fill = "Section") +
+  scale_x_discrete(guide = guide_axis(n.dodge = 2)) +
+  scale_fill_manual(values = c("#73E289",
+                               "#768CE5"))
+
+```
+
+-   Example 2
+
+```{r dvs-3-2}
+
+# Challenge 2 (Ugly Plot Challenge)
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, 
+                           y = bill_depth_mm, 
+                           color = flipper_length_mm, 
+                           shape = island, 
+                           size = body_mass_g)) + 
+  labs(title = "Relationship Between Penguins in Palmer Penguins Data Set", 
+       x = "Bill Length (mm)", 
+       y = "Bill Depth (mm)", 
+       color = "Flipper Length", 
+       shape = "Island", 
+       size = "Body Mass (g)") + 
+  xlim(0,200) + 
+  ylim(0,40)
+
+
+```
+
+**DVS-4: I can calculate numerical summaries of variables.**
+
+-   Example 1
+
+```{r dvs-4-1}
+
+# Challenge 3 (Question 1)
+hiphop_male <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  group_by(sex) |>
+  summarize(across(.cols = intl:unclassifiable,
+                   .fns = ~ mean(.x, na.rm = TRUE))) |>
+  pivot_longer("intl":"unclassifiable",
+               names_to = "Genres",
+               values_to = "Mean") |>
+  pivot_wider(names_from = "sex",
+              values_from = "Mean") |>
+  mutate(Difference = Female - Male) |>
+  print()
+
+
+```
+
+-   Example 2
+
+```{r dvs-4-2}
+
+# Lab 7 (Part 2.1)
+NAsum <- blackfoot |>
+  mutate(across(.cols = trip : species, 
+                ~ sum(is.na(.x)))) |>
+  pivot_longer("trip" : "species",
+               names_to = "Variable Name",
+               values_to = "Missing Values")
+head(NAsum)
+
+
+```
+
+**DVS-5: I can find summaries of variables across multiple groups.**
+
+-   Example 1
+
+```{r dvs-5-1}
+
+# Lab 9 (Part 3 Question 3)
+allison_f |>
+  group_by(Year) |>
+  summarize(Total = sum(Count)) |>
+  ggplot(mapping = aes(x = Year,
+                       y = Total)) +
+  geom_line() +
+  labs(y = NULL,
+       title = "Total Number of Allisons Born Between 1997-2014") +
+  scale_x_continuous(breaks = seq(1997, 2014, by = 1), 
+                     guide =  guide_axis(n.dodge = 2)) +
+  scale_y_continuous(breaks = seq(5000, 9000, by = 1000), 
+                     limits = c(5000, 8000)) + 
+  theme(plot.title = element_text(face = "bold",
+                                  hjust = 0.5))
+
+
+```
+
+-   Example 2
+
+```{r dvs-5-2}
+
+# Challenge 3 (Question 2)
+hiphop_white <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  mutate(ethnic_bin = 
+         case_when(ethnic == "white" ~ "White",
+                   TRUE ~ "NotWhite")) |>
+  group_by(ethnic_bin) |>
+  summarize(across(.cols = intl:unclassifiable,
+                   .fns = ~ mean(.x, na.rm = TRUE))) |>
+  pivot_longer("intl":"unclassifiable",
+               names_to = "Genres",
+               values_to = "Mean") |>
+  pivot_wider(names_from = "ethnic_bin",
+              values_from = "Mean") |>
+  mutate(Difference = NotWhite - White) |>
+  print()
+
+
+```
+
+**DVS-6: I can create tables which make my summaries clear to the reader.**
+
+-   Example 1
+
+```{r dvs-6-1}
+
+# Challenge 9 (Part 3 Question 1)
+allison |>
+  knitr::kable(format = "html",
+               col.names = c("State",
+                             "Sex",
+                             "Year",
+                             "Count"),
+               caption = "Summary of Frequency and Sex of Allisons in Each State") |>
+  kableExtra::kable_classic(html_font = "Arial") |>
+  kableExtra::kable_styling(bootstrap_options = "striped")
+
+
+```
+
+-   Example 2
+
+```{r dvs-6-2}
+
+# n/a
+
+```
+
+**DVS-7: I show creativity in my tables.**
+
+-   Example 1
+
+```{r dvs-7-1}
+
+# n/a
+
+```
+
+-   Example 2
+
+```{r dvs-7-2}
+
+# n/a
+
+```
+
+## Program Efficiency
+
+**PE-1: I can write concise code which does not repeat itself.**
+
+-   using a single function call
+
+```{r pe-1-one-call}
+
+# n/a 
+
+```
+
+-   `across()`
+
+```{r pe-1-across}
+
+# Challenge 3 Question 1
+hiphop_male <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  group_by(sex) |>
+  summarize(
+    across(
+      intl:unclassifiable,
+      mean,
+      na.rm = TRUE
+    )
+  )
+head(hiphop_male)
+
+
+```
+
+-   `map()` functions
+
+```{r pe-1-map-1}
+
+# n/a
+
+```
+
+**PE-2: I can write functions to reduce repetition in my code.**
+
+-   Example 1
+
+```{r pe2-1}
+
+# n/a
+
+```
+
+-   Example 2
+
+```{r pe2-2}
+
+# n/a
+
+```
+
+**PE-3:I can use iteration to reduce repetition in my code.**
+
+-   `across()`
+
+```{r pe-3-across}
+
+# Challenge 3 (Question 1)
+hiphop_male <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  group_by(sex) |>
+  summarize(
+    across(
+      intl:unclassifiable,
+      mean,
+      na.rm = TRUE
+    )
+  )
+head(hiphop_male)
+
+
+```
+
+-   `map()` functions (Provide 2 Examples)
+
+```{r pe-3-map-1}
+
+# n/a
+
+```
+
+```{r pe-3-map-2}
+
+# n/a
+
+```
+
+**PE-4: I can use modern tools when carrying out my analysis.**
+
+-   Example 1
+
+```{r pe-4-1}
+
+# Challenge 3 Question 2
+hiphop_white <- hiphop |>
+  distinct(subj, .keep_all = TRUE) |>
+  mutate(ethnic_bin = 
+           case_when(ethnic == "white" ~ "white",
+                           TRUE ~ "non-white"))
+  
+hiphop_white |>
+  group_by(ethnic_bin) |>
+  summarize(
+    across(
+      intl:unclassifiable,
+      mean,
+      na.rm = TRUE
+    )
+  )
+
+
+```
+
+-   Example 2
+
+```{r pe-4-2}
+
+# Lab 3 Question 14
+findbieber <- hiphop_clean |>
+  distinct(subj, .keep_all = TRUE)
+
+findbieber |>
+  filter(sex == "Male",
+         between(age, 17, 23),
+         ethnic == "white",
+         between(city, 10000, 60000)) |>
+  slice_max(bieber)
+
+
+```
+
+## Data Simulation & Modeling
+
+**DSM-1: I can simulate data from a *variety* of probability models.**
+
+-   Example 1
+
+```{r dsm-1-1}
+
+# n/a
+
+```
+
+-   Example 2
+
+```{r dsm-1-2}
+
+# n/a
+
+```
+
+**DSM-2: I can fit a linear regression and extract necessary summary measures.**
+
+-   Example 1
+
+```{r dsm-2-1}
+
+# n/a
+
+```
+
+-   Example 2
+
+```{r dsm-2-2}
+
+# n/a
+
+```
+
+## Revising My Thinking
+
+<!-- How did you revise your thinking throughout the course? How did you revise your thinking on the code examples you have provided in your portfolio? -->
+
+On several of the lab and challenge assignments, I have received "Growing" in places I need improvement and other suggestions on how to make my code more robust. From the very beginning, in Lab 1, Dr. Theobold stated "it is more resistant to extract a variable based on its name rather than its position in the dataset (2nd column)". Since then, I have modified my code to reflect this and called variables using the "\$" sign. Another example would be in Lab 3. In this assignment, I received several "Growing" for a number of reasons, many of which had to do with the format of the Quarto document, but one was hinting at a better way to "write code to find the maximum of that variable and the subject associated with it." Instead of filtering the variable for a certain number, in my revision, I instead used the slice_max() function. Overall, the comments left by Dr. Theobold, helped me realize that there are several ways to approach code, however, some are arguably better than others.
+
+## Extending My Thinking
+
+<!-- How did you extended your thinking throughout the course? How did you extend your thinking on the code examples you have provided in your portfolio? -->
+
+When I had extra free time, I tried to expand my knowledge and improve my code through other educational websites. In Lab 2, Question 3 asked what the data types of each variable was in the data set. Though most of the variables were listed as character or numeric, one was listed as a Date variable. I wasn't sure if "Date" was a variable type of its own or something else. After further research, I discovered that Dates were stored as numerical values in R and thus answered the question as such. Another example was in Lab 3, Question 14. The purpose of Question 14 was to filter data to find Justin Bieber. From previous revisions, I recognized that there are more efficient ways to write code so I looked up a better way to write double sided inequalities rather than doing a filter twice for the same variable. One website introduced me to the between() function which works similarly to double sided inequalities. I used this function in my code and overall it was more efficient and I no longer had to write repetetive code for filtering numeric values.
+
+## Peer Support & Collaboration
+
+<!-- Include an image of feedback you gave that you are proud of (either in a peer review or in Discord) -->
+
+![Discord - Week 2 Lab Assignment Channel](images/Screen%20Shot%202023-02-16%20at%2010.04.44%20AM.png)
+
+![Discord - Week 3 Lab Assignment Channel](images/Screen%20Shot%202023-02-16%20at%2010.06.05%20AM.png)
