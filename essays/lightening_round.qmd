@@ -3,3 +3,25 @@ title: "Lightening Round Essays"
 format: html
 editor: visual
 ---
+
+**Lightning round**: Answer each of the following questions with **one sentence** including a brief explanation.
+
+-   Finish the sentence with another student\'s name: \"If \[Student\] doesn\'t earn an A, then nobody should, because...\" Explain your choice and your reasoning.
+
+-   What was the most difficult part of the class for you? List a general topic, a specific problem, a kind of work we did, etc. and explain why.
+
+-   What was the easiest part of the class for you? Explain why.
+
+-   What part of the class surprised or interested you the most? Explain why.
+
+-   Give one piece of advice to a student just beginning a quarter of STAT 331 that will help them be successful in learning.
+
+If Jia doesn't earn an A, then nobody should, because I think there is strength in asking questions. I noticed that Jia often asks questions and for help in class and in discord, something that I personally struggle with. Although, I could argue that someone who answers all of these questions earns an A, I believe that by going out of their way to ask for help, a student demonstrates their drive, passion, and commitment to improving.
+
+The most difficult part of the class for me was understanding the dyplr package or more specifically, its syntax. I often had difficulty following the syntax between different functions such as mutate and across. Additionally, I had a hard time understanding that the dyplr functions can be stacked on top of each other, or in other words, nested. It wasn't until weeks of practice, when I started to get the hang of the different functions, how they interact with each other and the data set that is being "piped".
+
+I believe that the easiest part of the class for me was in Week 2 when we learned about ggplot and how to create tidy and easy to understand graphs. For me, the concepts were easy to grasp because the ggplot function acted almost as onion with several layers. Depending on how you "stack" the layers, a unique output will be produced. This was most apparent to me when working with density ridges and box plots. By writing the geom_jitter function first, the data points are displayed under the box plots. This way of thinking is also shown in the orientation of side-by-side box plots. Simply how you label the x and y axis can change whether the box plots are stacked vertically or horizontally.
+
+The part of the class that interested me the most was the topic on creating functions. Since this is a reoccurring theme among all coding classes, I immediately took interest. Functions in itself to me, are extremely frustrating, but getting one to work and run without error is the most rewarding feeling. However, I was mainly interested in how R functions compared to functions in other coding languages such as Python and Java.
+
+One piece of advice to a student just beginning a quarter of STAT 331 that will help them be successful in learning is to be organized. I can't stress enough how important this is, considering I myself am the least organized person. Not only will this help with completing the reflection and portfolio, but staying organized in notes and code will help in the long run. As a result, you will be able to locate files easier, and because you have easy access to notes, you can also understand where and why your code may fail, in addition to where more efficient methods can be implemented.
