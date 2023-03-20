@@ -1034,18 +1034,34 @@ allison_lm |>
 
 <!-- How did you revise your thinking throughout the course? How did you revise your thinking on the code examples you have provided in your portfolio? -->
 
-Prior to the first , I have received "Growing" in places I need improvement and other suggestions on how to make my code more robust. From the very beginning, in Lab 1, Dr. Theobold stated "it is more resistant to extract a variable based on its name rather than its position in the dataset (2nd column)". Since then, I have modified my code to reflect this and called variables using the "\$" sign. Another example would be in Lab 3. In this assignment, I received several "Growing" for a number of reasons, many of which had to do with the format of the Quarto document, but one was hinting at a better way to "write code to find the maximum of that variable and the subject associated with it." Instead of filtering the variable for a certain number, in my revision, I instead used the slice_max() function. Overall, the comments left by Dr. Theobold, helped me realize that there are several ways to approach code, however, some are arguably better than others.
+Prior to the first reflection, I had received "Growing" in several labs and challenges I needed improvement on and other suggestions on how to make my code more robust. From the very beginning, in Lab 1, Dr. Theobold stated "it is more resistant to extract a variable based on its name rather than its position in the dataset (2nd column)". Since then, I have modified my code to reflect this and called variables using the "\$" sign. Another example would be in Lab 3. In this assignment, I received several "Growing" many of which had to do with the format of the Quarto document, but one was hinting at a better way to "write code to find the maximum of that variable and the subject associated with it." Instead of filtering the variable for a certain number, in my revision, I used the slice_max() function. Overall, the comments left by Dr. Theobold, helped me realize that there are several ways to approach code, however, some are arguably better than others.
+
+Following the first reflection, my revisions have not stopped. One of my favorites was for Lab 9 Part 5 Question 9. Initially, I had several mutate functions that performed the same calculation on different columns, but each would result in a different name. After I received feedback from Dr. Theobold, I learned that the across function paired with the mutate function would be more efficient. From there, I was able to look closer at the across function and its "options" one of which being ".names". I combined the knowledge from the weeks prior such as the use of "{}" for variable names with what I learned about the across function to minimize and tidy my code. Overall, I am still continuing to learn, but the knowledge I obtained from the weeks prior continues to stack on top of each other and help me be a better coder.
 
 ## Extending My Thinking
 
 <!-- How did you extend your thinking throughout the course? How did you extend your thinking on the code examples you have provided in your portfolio? -->
 
+**Prior to First Reflection:**
+
 When I had extra free time, I tried to expand my knowledge and improve my code through other educational websites. In Lab 2, Question 3 asked what the data types of each variable was in the data set. Though most of the variables were listed as character or numeric, one was listed as a Date variable. I wasn't sure if "Date" was a variable type of its own or something else. After further research, I discovered that Dates were stored as numerical values in R and thus answered the question as such. Another example was in Lab 3, Question 14. The purpose of Question 14 was to filter data to find Justin Bieber. From previous revisions, I recognized that there are more efficient ways to write code so I looked up a better way to write double sided inequalities rather than doing a filter twice for the same variable. One website introduced me to the between() function which works similarly to double sided inequalities. I used this function in my code and overall it was more efficient and I no longer had to write repettetive code for filtering numeric values.
+
+**After First Reflection:**
+
+I have continued to extend my thinking as the weeks progressed in this course. In Lab 7, I explored more options in the tidyverse, more specifically the if_any function and the facet_wrap option "labeller". One of the first problems I encountered was that some of the tidyverse functions were being deprecated. In order to achieve the output I wanted, I had to look into the if_any function which served as a replacement for the across function when filtering the data set. Regarding the labeller option, I was experimenting with ggplot to come up with a creative graph. One of the functions I used was facet_wrap which allowed me to have two plots side by side (each one being a different Trip). However, when the plots were created, they were labelled as "1" and "2" for the Trip Number. This is where the labeller option came into play as I was able to change the labels to "Trip: 1" and "Trip: 2" which took my graphs to the next level by making it easier for the reader to understand them.
 
 ## Peer Support & Collaboration
 
 <!-- Include an image of feedback you gave that you are proud of (either in a peer review or in Discord) -->
 
+**Prior to First Reflection:**
+
 ![Discord - Lab 2 Assignment Channel](images/Screen%20Shot%202023-02-16%20at%2010.04.44%20AM.png)
 
 ![Discord - Lab 3 Assignment Channel](images/Screen%20Shot%202023-02-16%20at%2010.06.05%20AM.png)
+
+**After First Reflection:**
+
+![Peer Review - Lab 9 (Part 1)](images/Screen%20Shot%202023-03-19%20at%205.47.50%20PM.png)
+
+![Peer Review - Lab 9 (Part 2)](images/Screen%20Shot%202023-03-19%20at%205.48.24%20PM.png)
