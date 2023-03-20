@@ -35,8 +35,6 @@ surveys <- read_csv(here("surveys.csv"))
 
 # Practice Activity 4 (Question 1)
 library(readxl) 
-library(tidyverse)
-
 military <- read_xlsx(here::here("data", 
                                  "gov_spending_per_capita.xlsx"), 
                       sheet = "Share of Govt. spending", 
@@ -63,8 +61,8 @@ message <- read_csv(here::here("scrambled_message.txt"))
 # Lab 3 (Question 5)
 hiphop_clean <- hiphop |>
   select(
-    word, subj, sex, age, ethnic, familiarity, trial, fam1, popularityScore, 
-    city, county, bieber) |>
+    word, subj, sex, age, ethnic, familiarity, trial, 
+    fam1, popularityScore, city, county, bieber) |>
   mutate(
     familarity = as.factor(familiarity))
 
@@ -144,6 +142,7 @@ hiphop_male <- hiphop |>
               values_from = "Mean") |>
   mutate(Difference = Female - Male) |>
   print()
+
 
 ```
 
@@ -229,20 +228,23 @@ rescale_col_test <- blackfoot |>
 
 rescale_confirm <- blackfoot |>
   mutate(across(.cols = length:weight,
-                ~ rescale(.x, 
-                          to = c(0,1),
-                          from = range(.x, 
-                                       na.rm = TRUE, 
-                                       finite = TRUE)))) |>
+                .fns = ~ rescale(.x, 
+                                 to = c(0,1),
+                                 from = range(.x, 
+                                              na.rm = TRUE, 
+                                              finite = TRUE)))) |>
   mutate(id = seq_along(1:nrow(blackfoot))) |>
   select(id, length:weight) |>
   rename("rescale(length)" = "length",
          "rescale(weight)" = "weight")
 
 
-rescale_compare <- full_join(rescale_col_test, rescale_confirm, by = "id") 
+rescale_compare <- full_join(rescale_col_test, 
+                             rescale_confirm, 
+                             by = "id") 
 rescale_compare <- rescale_compare |>
-  select("weight", "rescale(weight)", "length", "rescale(length)")
+  select("weight", "rescale(weight)", 
+         "length", "rescale(length)")
 rescale_compare
 
 
@@ -262,7 +264,7 @@ allans <- tibble(Name = c("Allan",
 allan_names <- names |>
   filter(Gender == "M") |>
   semi_join(allans, by = "Name") |>
-  rename("Sex" = "Gender") |>
+  rename(Sex = Gender) |>
   print()
 
 
@@ -274,7 +276,8 @@ allan_names <- names |>
 
 # Practice Activity 4
 military_clean <- military_clean |>
-  anti_join(cont_region, by = c("Country" = "Region"))
+  anti_join(cont_region, 
+            by = c("Country" = "Region"))
 
 
 ```
@@ -288,7 +291,7 @@ military_clean <- military_clean |>
 # Lab 7 (Part 2.1)
 NAsum <- blackfoot |>
   mutate(across(.cols = trip : species, 
-                ~ sum(is.na(.x)))) |>
+                .fns = ~ sum(is.na(.x)))) |>
   pivot_longer("trip" : "species",
                names_to = "Variable Name",
                values_to = "Missing Values")
@@ -416,7 +419,7 @@ rescale_column <- function(dataframe, variables){
 # Lab 2 (Question 7)
 ggplot(data = surveys) +
   geom_jitter(mapping = aes(x = weight, 
-                           y = ftlength),
+                            y = ftlength),
              alpha = 0.3,
              width = 1,
              height = 1) +
@@ -469,10 +472,10 @@ surveys |>
   summarize(
     avg_weight = mean(weight, na.rm = TRUE)) |>
   ggplot(mapping = aes(x = year,
-                     y = avg_weight,
-                     colour = fct_reorder2(genus, 
-                                          year, 
-                                          avg_weight))) +
+                       y = avg_weight,
+                       colour = fct_reorder2(genus, 
+                                             year, 
+                                             avg_weight))) +
         geom_line() +
         labs(x = "Year",
              y = NULL,
@@ -494,10 +497,10 @@ surveys |>
   summarize(
     avg_weight = mean(weight, na.rm = TRUE)) |>
   ggplot(mapping = aes(x = year,
-                     y = avg_weight,
-                     colour = fct_reorder2(genus, 
-                                          year, 
-                                          avg_weight))) +
+                       y = avg_weight,
+                       colour = fct_reorder2(genus, 
+                                             year, 
+                                             avg_weight))) +
         geom_line() +
         labs(x = "Year",
              y = NULL,
@@ -514,7 +517,7 @@ surveys |>
 # Lab 2 (Question 6)
 ggplot(data = surveys) +
   geom_jitter(mapping = aes(x = weight, 
-                           y = ftlength),
+                            y = ftlength),
              alpha = 0.3,
              width = 1,
              height = 1) +
@@ -534,7 +537,7 @@ ggplot(data = surveys) +
 # Lab 7 (Part 2.2)
 visualizing <- blackfoot |>
   filter(if_any(.cols = trip : species,
-                ~ is.na(.x))) |>
+                .fns = ~ is.na(.x))) |>
   mutate(trip = as.factor(trip),
          year = as.factor(year)) |>
   rename("Trip" = trip) 
@@ -567,14 +570,16 @@ ggplot(data = penguins) +
                            color = flipper_length_mm, 
                            shape = island, 
                            size = body_mass_g)) + 
-  labs(title = "Relationship Between Penguins in Palmer Penguins Data Set", 
+  labs(title = 
+         "Relationship Between Penguins in Palmer 
+          Penguins Data Set", 
        x = "Bill Length (mm)", 
        y = "Bill Depth (mm)", 
        color = "Flipper Length", 
        shape = "Island", 
        size = "Body Mass (g)") + 
-  xlim(0,200) + 
-  ylim(0,40)
+  xlim(0, 200) + 
+  ylim(0, 40)
 
 
 ```
@@ -609,7 +614,7 @@ hiphop_male <- hiphop |>
 # Lab 7 (Part 2.1)
 NAsum <- blackfoot |>
   mutate(across(.cols = trip : species, 
-                ~ sum(is.na(.x)))) |>
+                .fns = ~ sum(is.na(.x)))) |>
   pivot_longer("trip" : "species",
                names_to = "Variable Name",
                values_to = "Missing Values")
@@ -794,7 +799,8 @@ allan <- allan_names |>
               values_fill = 0) |>
   filter(Year == 2000) |>
   mutate(Total = Allan + Allen + Alan,
-         across(.cols = Allen:Allan, .fns = ~ .x/Total,
+         across(.cols = Allen:Allan, 
+                .fns = ~ .x/Total,
                 .names = "{col}Prop"),
          OverallProp = Total/sum(Total)) |>
   select(Year, Sex, State, Allen, AllenProp, Alan, AlanProp, Allan, 
@@ -873,7 +879,7 @@ allan <- allan_names |>
   filter(Year == 2000) |>
   mutate(Total = Allan + Allen + Alan,
          across(.cols = Allen:Allan, 
-                .fns = ~.x/Total,
+                .fns = ~ .x/Total,
                 .names = "{col}Prop"),
          OverallProp = Total/sum(Total)) |>
   select(Year, Sex, State, Allen, AllenProp, Alan, AlanProp, Allan, 
@@ -906,8 +912,8 @@ xmas2 <- xmas |>
 song_create <- function(n){
 song <- map_chr(.x = 1:n,
                 .f = ~ sing_line(dataset = xmas2,
-                            line = .x,
-                            phrase_col = Full.Phrase)) |>
+                                 line = .x,
+                                 phrase_col = Full.Phrase)) |>
   str_c(collapse = "\n\n")
 return(glue::glue("{song}"))}
 song_create(12)
@@ -924,7 +930,7 @@ song_create(12)
 # Lab 7 (Part 2.2)
 visualizing <- blackfoot |>
   filter(if_any(.cols = trip : species,
-                ~ is.na(.x))) |>
+                .fns = ~ is.na(.x))) |>
   mutate(trip = as.factor(trip),
          year = as.factor(year)) |>
   rename("Trip" = trip) 
@@ -988,7 +994,8 @@ animal_lm <- animal |>
 
 animal_lm |>
   broom::augment() |>
-  ggplot(mapping = aes(y = .resid, x = .fitted)) +
+  ggplot(mapping = aes(y = .resid, 
+                       x = .fitted)) +
   geom_point()
 
 
@@ -1007,7 +1014,8 @@ allison_lm <- allison_f |>
 
 allison_lm |>
   broom::augment() |>
-  ggplot(mapping = aes(y = .resid, x = .fitted)) +
+  ggplot(mapping = aes(y = .resid, 
+                       x = .fitted)) +
   geom_point() + 
   labs(x = "Fitted",
        y = NULL,
@@ -1026,16 +1034,18 @@ allison_lm |>
 
 <!-- How did you revise your thinking throughout the course? How did you revise your thinking on the code examples you have provided in your portfolio? -->
 
-On several of the lab and challenge assignments, I have received "Growing" in places I need improvement and other suggestions on how to make my code more robust. From the very beginning, in Lab 1, Dr. Theobold stated "it is more resistant to extract a variable based on its name rather than its position in the dataset (2nd column)". Since then, I have modified my code to reflect this and called variables using the "\$" sign. Another example would be in Lab 3. In this assignment, I received several "Growing" for a number of reasons, many of which had to do with the format of the Quarto document, but one was hinting at a better way to "write code to find the maximum of that variable and the subject associated with it." Instead of filtering the variable for a certain number, in my revision, I instead used the slice_max() function. Overall, the comments left by Dr. Theobold, helped me realize that there are several ways to approach code, however, some are arguably better than others.
+Prior to the first , I have received "Growing" in places I need improvement and other suggestions on how to make my code more robust. From the very beginning, in Lab 1, Dr. Theobold stated "it is more resistant to extract a variable based on its name rather than its position in the dataset (2nd column)". Since then, I have modified my code to reflect this and called variables using the "\$" sign. Another example would be in Lab 3. In this assignment, I received several "Growing" for a number of reasons, many of which had to do with the format of the Quarto document, but one was hinting at a better way to "write code to find the maximum of that variable and the subject associated with it." Instead of filtering the variable for a certain number, in my revision, I instead used the slice_max() function. Overall, the comments left by Dr. Theobold, helped me realize that there are several ways to approach code, however, some are arguably better than others.
 
 ## Extending My Thinking
 
-<!-- How did you extended your thinking throughout the course? How did you extend your thinking on the code examples you have provided in your portfolio? -->
+<!-- How did you extend your thinking throughout the course? How did you extend your thinking on the code examples you have provided in your portfolio? -->
 
-When I had extra free time, I tried to expand my knowledge and improve my code through other educational websites. In Lab 2, Question 3 asked what the data types of each variable was in the data set. Though most of the variables were listed as character or numeric, one was listed as a Date variable. I wasn't sure if "Date" was a variable type of its own or something else. After further research, I discovered that Dates were stored as numerical values in R and thus answered the question as such. Another example was in Lab 3, Question 14. The purpose of Question 14 was to filter data to find Justin Bieber. From previous revisions, I recognized that there are more efficient ways to write code so I looked up a better way to write double sided inequalities rather than doing a filter twice for the same variable. One website introduced me to the between() function which works similarly to double sided inequalities. I used this function in my code and overall it was more efficient and I no longer had to write repetetive code for filtering numeric values.
+When I had extra free time, I tried to expand my knowledge and improve my code through other educational websites. In Lab 2, Question 3 asked what the data types of each variable was in the data set. Though most of the variables were listed as character or numeric, one was listed as a Date variable. I wasn't sure if "Date" was a variable type of its own or something else. After further research, I discovered that Dates were stored as numerical values in R and thus answered the question as such. Another example was in Lab 3, Question 14. The purpose of Question 14 was to filter data to find Justin Bieber. From previous revisions, I recognized that there are more efficient ways to write code so I looked up a better way to write double sided inequalities rather than doing a filter twice for the same variable. One website introduced me to the between() function which works similarly to double sided inequalities. I used this function in my code and overall it was more efficient and I no longer had to write repettetive code for filtering numeric values.
 
 ## Peer Support & Collaboration
 
 <!-- Include an image of feedback you gave that you are proud of (either in a peer review or in Discord) -->
 
-![Discord - Week 2 Lab Assignment Channel](STAT%20331%20gh/Portfolio/images/Screen%20Shot%202023-02-16%20at%2010.04.44%20AM.png)
+![Discord - Lab 2 Assignment Channel](images/Screen%20Shot%202023-02-16%20at%2010.04.44%20AM.png)
+
+![Discord - Lab 3 Assignment Channel](images/Screen%20Shot%202023-02-16%20at%2010.06.05%20AM.png)

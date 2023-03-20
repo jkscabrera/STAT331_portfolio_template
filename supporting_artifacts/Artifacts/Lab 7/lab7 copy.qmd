@@ -60,7 +60,7 @@ Create a thoughtful visualization exploring the frequency of missing values acro
 ```{r visualizing data}
 visualizing <- blackfoot |>
   filter(if_any(.cols = trip : species,
-                ~ is.na(.x))) |>
+                .fns = ~ is.na(.x))) |>
   mutate(trip = as.factor(trip),
          year = as.factor(year)) |>
   rename("Trip" = trip) 
